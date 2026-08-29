@@ -49,7 +49,11 @@ completeness" — an omitted method means the developer doesn't want it yet.
    `(req, res, next)`, 422 on missing required body fields (with the same
    `{ error, details }` shape), 404 when a row isn't found, try/catch around
    DB calls calling `next(error)` on failure. Full status-code table is in
-   the reference.
+   the reference. Two traps the reference spells out and that must not be
+   skipped: use the `isMissing` helper for required-field checks (a plain
+   `!field` wrongly rejects `0`/`false`), and guard the `:id` param's format
+   before querying (a malformed UUID otherwise becomes a 500 stack trace
+   instead of a 404).
 
 5. **Write `src/routes/<base>.ts`**, mirroring this repo's existing route
    files: one `router.<verb>(...)` per requested method, each wrapped in
