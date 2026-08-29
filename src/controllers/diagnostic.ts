@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 export const getDiagnostic = (req: Request, res: Response) => {
   res.status(200).json({
-    status: "up",
+    status: 'up',
     timestamp: new Date().toISOString(),
   });
 };

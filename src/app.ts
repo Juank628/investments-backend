@@ -1,11 +1,11 @@
-import express, { Express } from "express";
-import { createServer } from "node:http";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import usersRoutes from "./routes/users";
-import usersAdminRoutes from "./routes/usersAdmin";
-import diagnosticRoutes from "./routes/diagnostic";
-import { getTokenPayload } from "./middlewares/getTokenPayload";
+import express, { Express } from 'express';
+import { createServer } from 'node:http';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import usersRoutes from './routes/users';
+import usersAdminRoutes from './routes/usersAdmin';
+import diagnosticRoutes from './routes/diagnostic';
+import { getTokenPayload } from './middlewares/getTokenPayload';
 
 const app: Express = express();
 const server = createServer(app);
@@ -20,15 +20,15 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
-  }),
+  })
 );
 //unprotected routes
-app.use("/users", usersRoutes);
+app.use('/users', usersRoutes);
 //protected routes
 app.use(getTokenPayload);
-app.use("/users-admin", usersAdminRoutes);
-app.use("/diagnostic", diagnosticRoutes);
+app.use('/users-admin', usersAdminRoutes);
+app.use('/diagnostic', diagnosticRoutes);
 
-server.listen(port, "0.0.0.0", () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });
