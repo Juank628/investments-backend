@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ICreateVerticalSpreadBody, IUpdateVerticalSpreadBody } from './verticalSpreads.types';
 import { UUID_REGEX, isMissing } from './helpers';
 import VerticalSpread from '../models/VerticalSpread';
+import { IMiddlewareReq } from '../middlewares/types';
 
 export const getAllVerticalSpreads = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -35,7 +36,7 @@ export const getVerticalSpreadById = async (req: Request, res: Response, next: N
   }
 };
 
-export const createVerticalSpread = async (req: Request, res: Response, next: NextFunction) => {
+export const createVerticalSpread = async (req: IMiddlewareReq, res: Response, next: NextFunction) => {
   const {
     ticker,
     openDateTime,
@@ -106,6 +107,8 @@ export const createVerticalSpread = async (req: Request, res: Response, next: Ne
       closeDateTime,
       priceAtClose,
       netProfitLoss,
+      createdBy: req.tokenPayload?.email,
+      updatedBy: req.tokenPayload?.email,
     });
     res.status(201).json(verticalSpread);
   } catch (error) {
@@ -113,7 +116,7 @@ export const createVerticalSpread = async (req: Request, res: Response, next: Ne
   }
 };
 
-export const updateVerticalSpread = async (req: Request, res: Response, next: NextFunction) => {
+export const updateVerticalSpread = async (req: IMiddlewareReq, res: Response, next: NextFunction) => {
   const id = String(req.params.id);
   const body = req.body as IUpdateVerticalSpreadBody;
 
@@ -130,7 +133,7 @@ export const updateVerticalSpread = async (req: Request, res: Response, next: Ne
       return;
     }
 
-    await verticalSpread.update(body);
+    await verticalSpread.update({ ...body, updatedBy: req.tokenPayload?.email });
     res.status(200).json(verticalSpread);
   } catch (error) {
     next(error);

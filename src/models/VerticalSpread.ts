@@ -18,6 +18,10 @@ export interface IVerticalSpread extends Model {
   closeDateTime: string;
   priceAtClose: number;
   netProfitLoss: number; //broker's profit/loss after comissions
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
 }
 
 const VerticalSpread = sequelize.define<IVerticalSpread>('VerticalSpread', {
@@ -85,6 +89,22 @@ const VerticalSpread = sequelize.define<IVerticalSpread>('VerticalSpread', {
   netProfitLoss: {
     type: Sequelize.FLOAT,
     allowNull: true,
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+  },
+  createdBy: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false,
+  },
+  updatedBy: {
+    type: Sequelize.STRING,
+    allowNull: false,
   },
 });
 
