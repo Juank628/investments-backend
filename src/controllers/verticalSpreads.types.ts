@@ -33,3 +33,8 @@ export interface IUpdateVerticalSpreadBody {
   priceAtClose?: number;
   netProfitLoss?: number;
 }
+
+export interface IGetAllVerticalSpreadsQuery {
+  fromDate?: string;
+  toDate?: string;
+}

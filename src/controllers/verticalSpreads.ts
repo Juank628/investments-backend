@@ -1,13 +1,43 @@
 import { randomUUID } from 'node:crypto';
+import { Op } from 'sequelize';
 import { Request, Response, NextFunction } from 'express';
-import { ICreateVerticalSpreadBody, IUpdateVerticalSpreadBody } from './verticalSpreads.types';
-import { UUID_REGEX, isMissing } from './helpers';
+import {
+  ICreateVerticalSpreadBody,
+  IGetAllVerticalSpreadsQuery,
+  IUpdateVerticalSpreadBody,
+} from './verticalSpreads.types';
+import { ISO_DATE_REGEX, UUID_REGEX, isMissing } from './helpers';
 import VerticalSpread from '../models/VerticalSpread';
 import { IMiddlewareReq } from '../middlewares/types';
 
 export const getAllVerticalSpreads = async (req: Request, res: Response, next: NextFunction) => {
+  const { fromDate, toDate } = req.query as IGetAllVerticalSpreadsQuery;
+
+  const isFromDateInvalid = !isMissing(fromDate) && !ISO_DATE_REGEX.test(String(fromDate));
+  const isToDateInvalid = !isMissing(toDate) && !ISO_DATE_REGEX.test(String(toDate));
+
+  if (isFromDateInvalid || isToDateInvalid) {
+    res.status(422).json({
+      error: 'Invalid query parameters',
+      details: {
+        fromDate: isFromDateInvalid ? 'fromDate must be an ISO 8601 date (YYYY-MM-DD)' : undefined,
+        toDate: isToDateInvalid ? 'toDate must be an ISO 8601 date (YYYY-MM-DD)' : undefined,
+      },
+    });
+    return;
+  }
+
   try {
-    const verticalSpreads = await VerticalSpread.findAll();
+    const where: Record<string, unknown> = {};
+
+    if (!isMissing(fromDate) || !isMissing(toDate)) {
+      where.closeDateTime = {
+        ...(!isMissing(fromDate) && { [Op.gte]: `${fromDate}T00:00:00.000Z` }),
+        ...(!isMissing(toDate) && { [Op.lte]: `${toDate}T23:59:59.999Z` }),
+      };
+    }
+
+    const verticalSpreads = await VerticalSpread.findAll({ where });
     res.status(200).json(verticalSpreads);
   } catch (error) {
     next(error);
