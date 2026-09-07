@@ -13,3 +13,8 @@ export interface IUpdateMovementBody {
   description?: string;
   userId?: string;
 }
+
+export interface IGetAllMovementsQuery {
+  fromDate?: string;
+  toDate?: string;
+}
