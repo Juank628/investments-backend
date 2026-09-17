@@ -133,3 +133,12 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     next(error);
   }
 };
+
+export const getUsersList = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const users = await User.findAll({ attributes: ['email'], order: [['email', 'ASC']] });
+    res.status(200).json(users.map((user) => user.email));
+  } catch (error) {
+    next(error);
+  }
+};
