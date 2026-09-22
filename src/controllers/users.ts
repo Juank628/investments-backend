@@ -7,7 +7,7 @@ import User from '../models/User';
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body as ICreateUserBody;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
   if (!email || !password) {
     res.status(422).json({
