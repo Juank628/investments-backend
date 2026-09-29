@@ -8,6 +8,7 @@ export interface IBalance extends Model {
   calculatedBalance: number; //prev balance plus all P&L of the month
   realBalance: number; //real balance on broker account
   delta: number; // calculatedBalance - realBalance
+  comment: string;
   createdAt: string;
   createdBy: string;
   updatedAt: string;
@@ -38,6 +39,10 @@ const Balance = sequelize.define<IBalance>('Balance', {
   },
   delta: {
     type: Sequelize.FLOAT,
+    allowNull: true,
+  },
+  comment: {
+    type: Sequelize.TEXT,
     allowNull: true,
   },
   createdAt: {
