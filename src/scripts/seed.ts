@@ -1,14 +1,14 @@
-import "dotenv/config";
-import bcrypt from "bcryptjs";
-import { synchDataBase } from "../services/synch";
-import User from "../models/User";
+import 'dotenv/config';
+import bcrypt from 'bcryptjs';
+import { synchDataBase } from '../services/synch';
+import User from '../models/User';
 
-const SEED_EMAIL = process.env.SEED_ADMIN_EMAIL || "admin@example.com";
+const SEED_EMAIL = process.env.SEED_ADMIN_EMAIL || 'admin@example.com';
 const SEED_PASSWORD = process.env.SEED_ADMIN_PASSWORD;
 
 const seed = async () => {
   if (!SEED_PASSWORD) {
-    console.error("SEED_ADMIN_PASSWORD is not set in .env");
+    console.error('SEED_ADMIN_PASSWORD is not set in .env');
     process.exit(1);
   }
 
@@ -24,7 +24,7 @@ const seed = async () => {
   await User.create({
     email: SEED_EMAIL,
     password: encryptedPassword,
-    role: "admin",
+    role: 'admin',
   });
 
   console.log(`Seeded admin user: ${SEED_EMAIL}`);
