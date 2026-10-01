@@ -2,12 +2,12 @@ import Sequelize, { Model } from 'sequelize';
 import { sequelize } from '../services/db';
 
 export interface IBalance extends Model {
-  id: string;
-  dateTime: string; //first day of the month at 00:00:00h
+  month: string; //last day of the month (YYYY-MM-DD), one row per month and broker
   broker: 'IBKR' | 'TASTY';
   calculatedBalance: number; //prev balance plus all P&L of the month
   realBalance: number; //real balance on broker account
   delta: number; // calculatedBalance - realBalance
+  calculatedDetail: Record<string, unknown> | null; // generic breakdown of calculatedBalance
   comment: string;
   createdAt: string;
   createdBy: string;
@@ -16,17 +16,14 @@ export interface IBalance extends Model {
 }
 
 const Balance = sequelize.define<IBalance>('Balance', {
-  id: {
-    type: Sequelize.UUID,
+  month: {
+    type: Sequelize.DATEONLY,
     primaryKey: true,
-    allowNull: false,
-  },
-  dateTime: {
-    type: Sequelize.DATE,
     allowNull: false,
   },
   broker: {
     type: Sequelize.ENUM('IBKR', 'TASTY'),
+    primaryKey: true,
     allowNull: false,
   },
   calculatedBalance: {
@@ -39,6 +36,10 @@ const Balance = sequelize.define<IBalance>('Balance', {
   },
   delta: {
     type: Sequelize.FLOAT,
+    allowNull: true,
+  },
+  calculatedDetail: {
+    type: Sequelize.JSON,
     allowNull: true,
   },
   comment: {
