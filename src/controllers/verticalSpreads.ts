@@ -66,7 +66,11 @@ export const getVerticalSpreadById = async (req: Request, res: Response, next: N
   }
 };
 
-export const createVerticalSpread = async (req: IMiddlewareReq, res: Response, next: NextFunction) => {
+export const createVerticalSpread = async (
+  req: IMiddlewareReq,
+  res: Response,
+  next: NextFunction
+) => {
   const {
     ticker,
     openDateTime,
@@ -146,7 +150,11 @@ export const createVerticalSpread = async (req: IMiddlewareReq, res: Response, n
   }
 };
 
-export const updateVerticalSpread = async (req: IMiddlewareReq, res: Response, next: NextFunction) => {
+export const updateVerticalSpread = async (
+  req: IMiddlewareReq,
+  res: Response,
+  next: NextFunction
+) => {
   const id = String(req.params.id);
   const body = req.body as IUpdateVerticalSpreadBody;
 
